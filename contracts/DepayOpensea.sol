@@ -3,11 +3,13 @@
 pragma solidity >=0.7.5 <0.8.0;
 pragma abicoder v2;
 
-interface IERC721 {
+interface IERC1155 {
     function safeTransferFrom(
-        address from,
-        address to,
-        uint256 tokenId
+        address _from,
+        address _to,
+        uint256 _id,
+        uint256 _value,
+        bytes calldata _data
     ) external;
 }
 
@@ -176,10 +178,12 @@ contract Opensea {
                 stb(data[9]),
                 stb(data[10])
             );
-        IERC721(addresses[14]).safeTransferFrom(
+        IERC1155(addresses[14]).safeTransferFrom(
             addresses[15],
             address(this),
-            amounts[28]
+            amounts[28],
+            1,
+            ""
         );
         IOpensea(Opensea).atomicMatch_(
             [
@@ -237,6 +241,7 @@ contract Opensea {
             [amts8.am9, amts8.am10],
             [b32.b1, b32.b2, b32.b3, b32.b4, b32.b5]
         );
+        return true;
     }
 
     function stb(string memory source) public pure returns (bytes32 result) {
