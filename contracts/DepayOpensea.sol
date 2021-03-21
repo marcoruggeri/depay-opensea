@@ -63,6 +63,7 @@ contract Opensea is ERC1155Holder {
         address a13;
         address a14;
         address oneone;
+        address registry;
     }
 
     struct Amts {
@@ -124,7 +125,6 @@ contract Opensea is ERC1155Holder {
     function execute(
         uint256[] calldata amounts,
         address[] calldata addresses,
-        string[] calldata data,
         bytes[] calldata pardatabytes,
         bytes32[] calldata pardatabytes32
     ) external payable returns (bool) {
@@ -144,7 +144,8 @@ contract Opensea is ERC1155Holder {
                 addresses[11],
                 addresses[12],
                 addresses[13],
-                addresses[14]
+                addresses[14],
+                addresses[15]
             );
         Amts memory amts =
             Amts(
@@ -205,7 +206,7 @@ contract Opensea is ERC1155Holder {
             1,
             "0x0"
         );
-        IOpensea(0xa5409ec958C83C3f309868babACA7c86DCB077c1).registerProxy();
+        IOpensea(addr.registry).registerProxy();
 
         IOpensea(open).atomicMatch_(
             [

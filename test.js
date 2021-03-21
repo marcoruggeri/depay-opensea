@@ -1,37 +1,28 @@
-const { ethers } = require('hardhat')
-const { abi } = require('./abi')
-let nft
-describe('TEST', function () {
-  before(async () => {
-    const Opensea = await ethers.getContractFactory('Opensea')
-    opensea = await Opensea.deploy('0x5206e78b21Ce315ce284FB24cf05e0585A93B1d9')
-    const Nft = await ethers.getContractFactory('ERC1155')
-    nft = Nft.attach('0xeE45B41D1aC24E9a620169994DEb22739F64f231')
-  })
-  it('test', async function () {
-    let balance = await nft.balanceOf(
-      '0x462DA47a1C6a56E1791c0787Ee7651076126fE4a',
-      '22385119696991669137712570177803552560501582273052773259124679809391422078977'
-    )
-    console.log('balance', balance)
-    // Use the mainnet
-    const provider = ethers.getDefaultProvider('mainnet', {
-      infura: '9b82b72329ac4374b79d232a088001d0',
-    })
-    const signer = new ethers.Wallet(process.env.PK, provider)
-    const contract = new ethers.Contract('0xeE45B41D1aC24E9a620169994DEb22739F64f231', abi, signer)
-    await contract.setApprovalForAll(opensea.address, true)
-    opensea.execute(
+require('dotenv').config()
+const ethers = require('ethers')
+const { abinft, abicon } = require('./test/abi')
+
+const provider = ethers.getDefaultProvider('rinkeby', {
+  infura: '9b82b72329ac4374b79d232a088001d0',
+})
+const signer = new ethers.Wallet(process.env.PK, provider)
+const nft = new ethers.Contract('0xeE45B41D1aC24E9a620169994DEb22739F64f231', abinft, signer)
+const con = new ethers.Contract('0x0270afF4ba14Ffa652641Ba5fBD682521C9Cee14', abicon, signer)
+
+const exec = async () => {
+  try {
+    // await nft.setApprovalForAll('0x0270afF4ba14Ffa652641Ba5fBD682521C9Cee14', true)
+    await con.execute(
       [
         '0',
         '250',
         '0',
         '0',
-        '10000000000000000',
-        '0',
-        '1616326794',
-        '1616928084',
-        '58666683755008338361717693840326727733964402136281366324783357721745746660571',
+        '10000000000000000', // base_price
+        '0', // extra
+        '1616328214', // listin_time
+        '1616929506', // expiration_time
+        '32843534532482213771126326242558443867909640088051159430920126998469102606339', // salt
         '0',
         '250',
         '0',
@@ -88,10 +79,9 @@ describe('TEST', function () {
         '0x0000000000000000000000000000000000000000000000000000000000000000',
       ]
     )
-    let balance2 = await nft.balanceOf(
-      '0x462DA47a1C6a56E1791c0787Ee7651076126fE4a',
-      '22385119696991669137712570177803552560501582273052773259124679809391422078977'
-    )
-    console.log('balance2', balance2)
-  })
-})
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+exec()
