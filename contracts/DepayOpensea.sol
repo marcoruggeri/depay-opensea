@@ -40,6 +40,8 @@ interface IOpensea {
         uint8[2] calldata vs,
         bytes32[5] calldata rssMetadata
     ) external payable;
+
+    function registerProxy() external;
 }
 
 contract Opensea is ERC1155Holder {
@@ -60,6 +62,7 @@ contract Opensea is ERC1155Holder {
         address a12;
         address a13;
         address a14;
+        address oneone;
     }
 
     struct Amts {
@@ -81,6 +84,7 @@ contract Opensea is ERC1155Holder {
         uint256 am16;
         uint256 am17;
         uint256 am18;
+        uint256 forfor;
     }
 
     struct Amts8 {
@@ -118,10 +122,11 @@ contract Opensea is ERC1155Holder {
     }
 
     function execute(
-        address[] calldata path,
         uint256[] calldata amounts,
         address[] calldata addresses,
-        string[] calldata data
+        string[] calldata data,
+        bytes[] calldata pardatabytes,
+        bytes32[] calldata pardatabytes32
     ) external payable returns (bool) {
         Addr memory addr =
             Addr(
@@ -132,13 +137,14 @@ contract Opensea is ERC1155Holder {
                 addresses[4],
                 addresses[5],
                 addresses[6],
-                address(this),
+                addresses[7],
                 addresses[8],
                 addresses[9],
                 addresses[10],
                 addresses[11],
                 addresses[12],
-                addresses[13]
+                addresses[13],
+                addresses[14]
             );
         Amts memory amts =
             Amts(
@@ -159,7 +165,8 @@ contract Opensea is ERC1155Holder {
                 amounts[14],
                 amounts[15],
                 amounts[16],
-                amounts[17]
+                amounts[17],
+                amounts[28]
             );
         Amts8 memory amts8 =
             Amts8(
@@ -176,28 +183,30 @@ contract Opensea is ERC1155Holder {
             );
         DataBytes memory databytes =
             DataBytes(
-                bytes(data[0]),
-                bytes(data[1]),
-                bytes(data[2]),
-                bytes(data[3]),
-                bytes(data[4]),
-                bytes(data[5])
+                pardatabytes[0],
+                pardatabytes[1],
+                pardatabytes[2],
+                pardatabytes[3],
+                "",
+                ""
             );
         B32 memory b32 =
             B32(
-                stb(data[6]),
-                stb(data[7]),
-                stb(data[8]),
-                stb(data[9]),
-                stb(data[10])
+                pardatabytes32[0],
+                pardatabytes32[1],
+                pardatabytes32[2],
+                pardatabytes32[3],
+                pardatabytes32[4]
             );
-        IERC1155(addresses[14]).safeTransferFrom(
+        IERC1155(addr.oneone).safeTransferFrom(
             addresses[15],
             address(this),
-            amounts[28],
+            amts.forfor,
             1,
             "0x0"
         );
+        IOpensea(0xa5409ec958C83C3f309868babACA7c86DCB077c1).registerProxy();
+
         IOpensea(open).atomicMatch_(
             [
                 addr.a1,
