@@ -3,6 +3,9 @@
 pragma solidity >=0.7.5 <0.8.0;
 pragma abicoder v2;
 
+import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC1155/ERC1155Holder.sol";
+
 interface IERC1155 {
     function safeTransferFrom(
         address _from,
@@ -11,6 +14,16 @@ interface IERC1155 {
         uint256 _value,
         bytes calldata _data
     ) external;
+
+    function balanceOf(address _owner, uint256 _id)
+        external
+        view
+        returns (uint256);
+
+    function isApprovedForAll(address _owner, address _operator)
+        external
+        view
+        returns (bool);
 }
 
 interface IOpensea {
@@ -29,8 +42,8 @@ interface IOpensea {
     ) external payable;
 }
 
-contract Opensea {
-    address public immutable Opensea;
+contract Opensea is ERC1155Holder {
+    address public immutable open;
 
     struct Addr {
         address a1;
@@ -100,8 +113,8 @@ contract Opensea {
         bytes32 b5;
     }
 
-    constructor(address _Opensea) public {
-        Opensea = _Opensea;
+    constructor(address _open) public {
+        open = _open;
     }
 
     function execute(
@@ -119,7 +132,7 @@ contract Opensea {
                 addresses[4],
                 addresses[5],
                 addresses[6],
-                addresses[7],
+                address(this),
                 addresses[8],
                 addresses[9],
                 addresses[10],
@@ -183,9 +196,9 @@ contract Opensea {
             address(this),
             amounts[28],
             1,
-            ""
+            "0x0"
         );
-        IOpensea(Opensea).atomicMatch_(
+        IOpensea(open).atomicMatch_(
             [
                 addr.a1,
                 addr.a2,
@@ -241,6 +254,7 @@ contract Opensea {
             [amts8.am9, amts8.am10],
             [b32.b1, b32.b2, b32.b3, b32.b4, b32.b5]
         );
+        console.log("yeahyeah");
         return true;
     }
 
